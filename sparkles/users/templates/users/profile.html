@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+      <div class="col-md-3">
+        <!-- Sidebar с профилем пользователя -->
+        <div class="card mb-3">
+          <div class="card-body text-center">
+            <h5 class="card-title mt-3">{{ user.username }}</h5>
+            <div class="mt-2">
+              <a href="{% url 'users:update' user.username %}" class="btn btn-primary btn-block">Редактировать профиль</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <!-- Основная информация о пользователе -->
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">Основная информация</h5>
+            <ul class="list-group">
+              <li class="list-group-item">Имя: {{ user.first_name }}</li>
+              <li class="list-group-item">Фамилия: {{ user.last_name }}</li>
+              <li class="list-group-item">Email: {{ user.email }}</li>
+              <li class="list-group-item">Страна: {{ user.country }}</li>
+              <li class="list-group-item">Дата регистрации: {{ user.date_joined }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock %}
+

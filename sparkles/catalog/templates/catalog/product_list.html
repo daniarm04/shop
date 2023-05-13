@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+        <!-- Навигация по категориям -->
+        <div class="col-md-3">
+          <h3>Категория</h3>
+          <form method="GET" action="{% url 'catalog:product_list' %}">
+              <div class="form-group">
+                <select class="form-control" id="category" name="category">
+                  <option value="none">Все категории</option>
+                  {% for category in category_list %}
+                    {% if current_category == category.id %}
+                        <option value="{{ category.id }}" selected="selected">{{ category.name }}</option>
+                    {% else %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary cform">Фильтровать</button>
+          </form>
+        </div>
+        <!-- Карточки товаров  -->
+        <div class="col-md-9">
+          <h3>Товары</h3>
+          <div class="row">
+              {% if products %}
+                {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                      <div class="card">
+                        <img class="card-img-top" src="{{ product.img.url }}" alt="Товар 1">
+                        <div class="card-body">
+                          <h5 class="card-title"><a href="{{ product.get_absolute_url }}" class="nounder">{{ product.name }}</a></h5>
+                          <p class="card-text">{{ product.description }}</p>
+                          <p class="card-text">Цена: {{ product.price }}р.</p>
+                          <a href="#" class="btn btn-primary">Купить</a>
+                        </div>
+                      </div>
+                    </div>
+                {% endfor %}
+              {% else %}
+                <p align="center">Здесь пока пусто</p>
+              {% endif %}
+          </div>
+        </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock scripts %}
+

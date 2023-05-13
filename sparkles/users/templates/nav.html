@@ -1,0 +1,18 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        Sparkles
+    </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% for link in nav_links %}
+        <li class="nav-item">
+          <a class="nav-link {% if link.is_active %}active {% endif %}" href="{% if link.url == 'users:profile' %} {% url link.url request.user.username %} {% else %} {% url link.url %} {% endif %}">
+              {{ link.label }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>
