@@ -1,28 +1,29 @@
 from django.views.generic import ListView, DetailView, CreateView
-from django.shortcuts import get_object_or_404
 
 from .models import Product, Category, Comment
+from .forms import CreateProductForm
 
 
 class ProductListView(ListView):
     model = Product
-    template_name = 'catalog/product_list.html'
     context_object_name = 'products'
 
     def get_queryset(self):
-        if self.request.GET.get('category') != 'none':
-            return Product.objects.filter(category__id=self.request.GET.get('category'))
+        category = self.get_current_category()
+        if category != 'Все категории':
+            return Product.objects.filter(category__name=category)
         return super().get_queryset()
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
-        context['title'] = 'Список товаров'
         context['category_list'] = Category.objects.all()
-        try:
-            context['current_category'] = int(self.request.GET.get('category'))
-        except:
-            context['current_category'] = 'none'
+        context['current_category'] = self.get_current_category()
         return context
+
+    def get_current_category(self):
+        if self.request.GET.get('category') and self.request.GET.get('category') != 'Все категории':
+            return self.request.GET.get('category')
+        return 'Все категории'
 
 
 class ProductDetailView(DetailView):
@@ -33,3 +34,5 @@ class ProductDetailView(DetailView):
 
 class ProductCreateView(CreateView):
     model = Product
+    template_name = 'catalog/product_create.html'
+    form_class = CreateProductForm

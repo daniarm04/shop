@@ -11,6 +11,8 @@ def navigation(context):
     active = f'{namespace}:{url_name}'
     if request.user.is_authenticated:
         nav_links = [
+            {'url': 'catalog:product_list', 'label': 'Список товаров'},
+            {'url': 'catalog:product_create', 'label': 'Добавить товар'},
             {'url': 'users:profile', 'label': request.user},
             {'url': 'users:logout', 'label': 'Выйти'},
         ]

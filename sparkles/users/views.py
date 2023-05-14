@@ -17,7 +17,6 @@ User = get_user_model()
 
 class UserLoginView(LoginView):
     template_name = 'users/login.html'
-    extra_context = {'title': 'Войти'}
     form_class = forms.CustomUserLoginForm
 
     def get_success_url(self):
@@ -27,7 +26,6 @@ class UserLoginView(LoginView):
 class UserRegisterView(CreateView):
     template_name = 'users/register.html'
     form_class = forms.CustomUserCreationForm
-    extra_context = {'title': 'Зарегистрироваться'}
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -46,7 +44,6 @@ class ProfileView(DetailView):
 
 class UserLogoutView(LogoutView):
     template_name = 'users/logout_success.html'
-    extra_context = {'title': 'Выход'}
 
 
 class ProfileUpdateView(UpdateView):
@@ -55,7 +52,6 @@ class ProfileUpdateView(UpdateView):
     form_class = forms.CustomUpdateForm
     slug_field = 'username'
     slug_url_kwarg = 'username'
-    extra_context = {'title': 'Редактирование профиля'}
 
     def get_success_url(self):
         return self.request.user.get_absolute_url()

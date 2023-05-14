@@ -1,53 +1,73 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ current_category }}
+{% endblock %}
+
 {% block content %}
 <div class="row">
         <!-- Навигация по категориям -->
-        <div class="col-md-3">
-          <h3>Категория</h3>
-          <form method="GET" action="{% url 'catalog:product_list' %}">
-              <div class="form-group">
-                <select class="form-control" id="category" name="category">
-                  <option value="none">Все категории</option>
-                  {% for category in category_list %}
-                    {% if current_category == category.id %}
-                        <option value="{{ category.id }}" selected="selected">{{ category.name }}</option>
-                    {% else %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-              </div>
-              <button type="submit" class="btn btn-primary cform">Фильтровать</button>
-          </form>
-        </div>
-        <!-- Карточки товаров  -->
-        <div class="col-md-9">
-          <h3>Товары</h3>
-          <div class="row">
-              {% if products %}
-                {% for product in products %}
-                    <div class="col-md-4 mb-4">
-                      <div class="card">
-                        <img class="card-img-top" src="{{ product.img.url }}" alt="Товар 1">
-                        <div class="card-body">
-                          <h5 class="card-title"><a href="{{ product.get_absolute_url }}" class="nounder">{{ product.name }}</a></h5>
-                          <p class="card-text">{{ product.description }}</p>
-                          <p class="card-text">Цена: {{ product.price }}р.</p>
-                          <a href="#" class="btn btn-primary">Купить</a>
-                        </div>
-                      </div>
-                    </div>
-                {% endfor %}
-              {% else %}
-                <p align="center">Здесь пока пусто</p>
-              {% endif %}
+    <div class="col-md-3">
+      <h3>Категория</h3>
+      <form method="GET" action="{% url 'catalog:product_list' %}">
+          <div class="form-group">
+            <select class="form-control" id="category" name="category">
+              <option value="Все категории">Все категории</option>
+              {% for category in category_list %}
+                {% if current_category == category.name %}
+                    <option value="{{ category.name }}" selected="selected">{{ category.name }}</option>
+                {% else %}
+                    <option value="{{ category.name }}">{{ category.name }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
           </div>
-        </div>
+          <button type="submit" class="btn btn-primary cform">Фильтровать</button>
+      </form>
+    </div>
+        <!-- Карточки товаров  -->
+    <div class="col-md-9">
+      <h3>Товары</h3>
+      <div class="row">
+        {% if products %}
+          {% for product in products %}
+            <div class="col-md-4 mb-4">
+              <div class="card">
+                <a href="{{ product.get_absolute_url }}"><img class="card-img-top" src="{{ product.image.url }}" alt="Товар 1"></a>
+                <div class="card-body">
+                  <h5 class="card-title"><a href="{{ product.get_absolute_url }}" class="nounder">{{ product.name }}</a></h5>
+                  <p class="card-text">{{ product.description|slice:"60" }}...</p>
+                  <p class="card-text"><strong>Цена:</strong> {{ product.price }}р.</p>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#buyModal">Купить</button>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="buyModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="buyModalLabel">Количество товара</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                  </div>
+                  <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                      <label for="quantity">Количество:</label>
+                      <input type="number" name="quantity" id="quantity" value="1" min="1" required>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                      <button type="submit" class="btn btn-primary">Добавить в корзину</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p align="center">Здесь пока пусто</p>
+          {% endif %}
+      </div>
+    </div>
 </div>
 {% endblock %}
-
-{% block scripts %}
-
-{% endblock scripts %}
-
